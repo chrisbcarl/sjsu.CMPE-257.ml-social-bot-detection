@@ -1,3 +1,24 @@
+# project specific
+.vscode/settings.json
+bin/**
+dist/**
+ignoreme**
+**/venv
+**.log
+**.pkl
+# latex
+**.aux
+**.data.minted
+*.bbl
+*.blg
+*.out
+*.jar
+src/.DS_Store
+.DS_Store
+
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

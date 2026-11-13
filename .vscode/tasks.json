@@ -1,0 +1,37 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "on-launch",
+            "type": "shell",
+            "runOptions": {"runOn": "folderOpen"},
+            "command": "echo",
+            "args": [
+                "whats", "up"
+            ]
+        },
+        // long-running and project helping tasks that start on vscode launch
+        {
+            "label": "scriptlets",
+            "type": "shell",
+            "runOptions": {"runOn": "folderOpen"},
+            "windows": {
+                "command": "&",
+                "args": [
+                    ".vscode/tasks/scriptlets.ps1"
+                ]
+            },
+        },
+        {
+            "label": "servers",
+            "type": "shell",
+            "runOptions": {"runOn": "folderOpen"},
+            "windows": {
+                "command": "&",
+                "args": [
+                    ".vscode/tasks/servers.ps1"
+                ]
+            },
+        },
+    ]
+}
