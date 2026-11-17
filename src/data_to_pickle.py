@@ -3,10 +3,10 @@ import pickle
 import warnings
 import pandas as pd
 
-def data_to_pickle(filepath, pickle_filepath):
+def data_to_pickle(filepath, pickle_filepath, skip_exists=False):
     # type: (str, str) -> list[tuple[str, str]]
     changed_columns = []
-    if os.path.isfile(pickle_filepath) and os.path.getsize(filepath) / os.path.getsize(pickle_filepath) > 0.3:
+    if not skip_exists and os.path.isfile(pickle_filepath) and os.path.getsize(filepath) / os.path.getsize(pickle_filepath) > 0.3:
         changed_columns += [('pickle', 'exists')]
         return changed_columns
 
