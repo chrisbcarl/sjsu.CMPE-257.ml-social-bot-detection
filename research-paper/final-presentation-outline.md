@@ -52,6 +52,8 @@
 
 - Train a Random Forest of 100 trees
 
+    Using 5-fold CV.
+
     Each dataset will have a model mapped to it.
 
 - Test on all other datasets

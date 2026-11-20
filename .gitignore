@@ -1,9 +1,11 @@
+# project specific
+*.nav
+*.snm
+*.toc
 /backups/
 /.venv/
 /data/
 /results/
-
-# project specific
 .vscode/settings.json
 bin/**
 dist/**
