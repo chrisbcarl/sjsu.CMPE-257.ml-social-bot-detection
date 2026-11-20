@@ -1,3 +1,19 @@
+% AI Assisted - Gemini 3.1 Pro - https://gemini.google.com/app/4f152ebbea25e44e
+% PROMPT:
+% # Inputs
+% Given this markdown document, create a beamer latex-style pdf presentation and a powerpoint export. Create a script that can do this work offline keeping in mind that offline execution will not have access to LLMs or APIs.
+%
+% ## Presentation Style
+% Do not change the text of the outline. Do not inspect it for correctness or accuracy.
+% `#` heading indicates a title-style slide.
+% `##` heading is a typical slide. If the entire contents under the heading can fit in one page, aim for that. If not, spreading across more slides is permitted.
+% In general, double column is preferred if it will fit.
+% Indented text is designed to be smaller font and presented as quotes or indented blocks instead of bullets.
+%
+% # Outputs
+% Outputs should be: the pdf presentation, tex source, pptx conversion, script.py, and a dockerfile.
+
+
 \documentclass[aspectratio=169, 10pt]{beamer}
 
 % Packages
