@@ -3,13 +3,11 @@ SJSU 2026F CMPE 257 - Scalable and Generalizable Social Bot Detection through Da
 
 
 # Setup
-```powershell
+```bash
+# request the data from the researchers
 poetry install
-choco install mysql mysql.odbc msql-cli -y
+jupyter notebook ./classifier.ipynb
 ```
-- mysql and workbench
-    https://cdn.mysql.com//Downloads/MySQLInstaller/mysql-installer-community-8.0.46.0.msi
-    https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-26.10.0-winx64.msi
 
 
 # Paper
@@ -20,13 +18,30 @@ choco install mysql mysql.odbc msql-cli -y
 - Filippo Menczer
 
 
+# Conclusions
+
+- "No dataset can generalize well on other datasets."
+
+    > CONFIRMED - `cresci-17` did not generalize well to `twibot-22`
+
+- "Selection is a promising direction for dealing with noisy training data."
+
+    > CONFIRMED - `cresci-17` could be data selected to improve generalizability.
+
+    |Test                      |Features|AUC      |
+    |---                       |---     |---      |
+    |cresci-17 cross-validation|20      |0.998    |
+    |cresci-17 cross-validation|16      |0.994    |
+    |cresci-17 → TwiBot-22     |16      |**0.606**|
+
+
 # Datasets
 ## cresci-17
 - `Dr. Stefano Cresci <stefano.cresci@iit.cnr.it>`
     - [Dr. Stefano Cresci](https://stefanocresci.com/)
 - [request/hosting](http://mib.projects.iit.cnr.it/dataset.html)
-    - [data sql (MySQL)](https://afs.tools.iit.cnr.it/f/3d90027eb4/)
     - [data csv](https://afs.tools.iit.cnr.it/f/2e00752708/)
+    - [data sql (MySQL)](https://afs.tools.iit.cnr.it/f/3d90027eb4/)
 
 ## TwiBot-22 / TwiBot-20
 - `Shangbin Feng <shangbin@cs.washington.edu>`
@@ -39,5 +54,5 @@ choco install mysql mysql.odbc msql-cli -y
 # Authors
 |Name             |Email                       |Github Username           |Contributions                               |
 |---              |---                         |---                       |---                                         |
-|Chris Carl       |<chris.carl@sjsu.edu>       |chrisbcarl, chriscarl-sjsu|Project management, implementation attempt 1|
-|Jehu Zepeda-Silva|<jehu.zepeda-silva@sjsu.edu>|jehuzepeda-silva-rgb      |ISA Definition                              |
+|Chris Carl       |<chris.carl@sjsu.edu>       |data acquisition, slides, secondary implementation|
+|Jehu Zepeda-Silva|<jehu.zepeda-silva@sjsu.edu>|jehuzepeda-silva-rgb      |primary implementation                              |
