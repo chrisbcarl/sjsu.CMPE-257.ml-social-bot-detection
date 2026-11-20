@@ -1,0 +1,374 @@
+\documentclass[aspectratio=169, 10pt]{beamer}
+
+% Packages
+\usepackage[english]{babel}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+
+% Theme & Styling
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+\definecolor{NavyPrimary}{RGB}{20, 50, 95}
+\definecolor{TealAccent}{RGB}{14, 116, 144}
+\definecolor{LightGrayBg}{RGB}{245, 247, 250}
+
+\setbeamercolor{palette primary}{bg=NavyPrimary,fg=white}
+\setbeamercolor{titlelike}{parent=palette primary}
+\setbeamercolor{frametitle}{bg=NavyPrimary,fg=white}
+\setbeamercolor{structure}{fg=NavyPrimary}
+
+\newtcolorbox{indentedblock}{
+  colback=LightGrayBg,
+  colframe=NavyPrimary!30,
+  arc=2mm,
+  boxrule=0.5pt,
+  left=2mm,
+  right=2mm,
+  top=1.5mm,
+  bottom=1.5mm
+}
+
+\title[Replication Study]{Replication Study: Generalizing Social Bot Detection}
+\subtitle{Main Presentation}
+\author[Carl \& Zepeda-Silva]{\href{mailto:chris.carl@outlook.com}{Chris Carl} \and \href{mailto:jehu.zepeda-silva@sjsu.edu}{Jehu Zepeda-Silva}}
+\institute{San Jose State University}
+\date{\today}
+
+\begin{document}
+
+% Slide 1: Title Slide
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Slide 2: Paper
+\begin{frame}{Paper}
+  \begin{indentedblock}
+    \textbf{Reference Paper:}\\
+    \href{https://doi.org/10.1609/aaai.v34i01.5460}{Scalable and Generalizable Social Bot Detection through Data Selection}
+  \end{indentedblock}
+
+  \vspace{0.4cm}
+  \textbf{Authors:}
+  \begin{itemize}
+    \item Kai-Cheng Yang
+    \item Onur Varol
+    \item Pik-Mai Hui
+    \item Filippo Menczer
+  \end{itemize}
+\end{frame}
+
+% Slide 3: Findings
+\begin{frame}{Findings}
+  \begin{columns}[T]
+    \begin{column}{0.58\textwidth}
+      \textbf{Big Findings}
+      \begin{indentedblock}
+        \small ``No dataset can generalize well on other datasets.''
+      \end{indentedblock}
+      \small \textbf{CONFIRMED} -- \texttt{cresci-17} did not generalize well to \texttt{twibot-22}
+
+      \vspace{0.2cm}
+      \begin{indentedblock}
+        \small ``Selection is a promising direction for dealing with noisy training data.''
+      \end{indentedblock}
+      \small \textbf{CONFIRMED} -- \texttt{cresci-17} could be data selected to improve generalizability.
+    \end{column}
+
+    \begin{column}{0.38\textwidth}
+      \centering
+      \resizebox{\linewidth}{!}{
+        \begin{tabular}{lll}
+          \toprule
+          \textbf{Test} & \textbf{Features} & \textbf{AUC} \\
+          \midrule
+          cresci-17 cross-validation & 20 & 0.998 \\
+          cresci-17 cross-validation & 16 & 0.994 \\
+          cresci-17 $\rightarrow$ TwiBot-22 & 16 & \textbf{0.606} \\
+          \bottomrule
+        \end{tabular}
+      }
+
+      \textbf{Small Findings}
+
+      \vspace{0.2cm}
+      \begin{indentedblock}
+        \small Screen Name Likelihood was not a contributing feature
+      \end{indentedblock}
+      \small \textbf{CONFIRMED} -- \texttt{cresci-17} could be data selected to improve generalizability.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% Slide 4: Yang - Process
+\begin{frame}{Yang - Process}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{itemize}
+        \item \textbf{Collect a bunch of datasets}
+          \begin{indentedblock}
+            \tiny \texttt{caverlee}, \texttt{varol-icwsm}, \texttt{cresci-17}, \texttt{pronbots}, \texttt{celebrity}, \texttt{vendor-purchased}, \texttt{botometer-feedback}, \texttt{political-bots}, \texttt{gilani-17}, \texttt{cresci-rtbust}, \texttt{cresci-stock}, \texttt{midterm-18}, \texttt{botwiki}, \texttt{verified}\\
+            \vspace{0.1cm}
+            \scriptsize Focus on the user metadata and telemetry, not tweet content.
+          \end{indentedblock}
+
+        \item \textbf{Feature select and engineer}
+          \begin{indentedblock}
+            \scriptsize Using status, follower, friends counts and other boolean flags, engineer new features like likelihood, lengths, and rates.
+          \end{indentedblock}
+      \end{itemize}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{itemize}
+        \item \textbf{Train a Random Forest of 100 trees}
+          \begin{indentedblock}
+            \scriptsize Each dataset will have a model mapped to it.
+          \end{indentedblock}
+
+        \item \textbf{Test on all other datasets}
+          \begin{indentedblock}
+            \scriptsize Each dataset's model will test against all other datasets.
+          \end{indentedblock}
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% Slide 5: Yang - Definitions
+\begin{frame}{Yang - Definitions}
+  \begin{itemize}
+    \item \textbf{seperability}
+      \begin{indentedblock}
+        \small AUC averaging across columns
+      \end{indentedblock}
+    \item \textbf{generalizability}
+      \begin{indentedblock}
+        \small AUC averaging across rows
+      \end{indentedblock}
+    \item \textbf{likelihood}
+      \begin{indentedblock}
+        \small sum of 2-gram probabilities of a username
+      \end{indentedblock}
+    \item \textbf{SHAP Values}
+      \begin{indentedblock}
+        \small describes each feature as more human-like or more bot-like
+      \end{indentedblock}
+  \end{itemize}
+\end{frame}
+
+% Slide 6: CZ - Process
+\begin{frame}{CZ - Process}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{itemize}
+        \item \textbf{Collect a bunch of datasets (partial recreation)}
+          \begin{indentedblock}
+            \scriptsize We collected 2 datasets, one original, \texttt{cresci-17}, and one not in the original, \texttt{twibot-22}.
+          \end{indentedblock}
+        \item \textbf{Feature select and engineer (partial recreation)}
+          \begin{indentedblock}
+            \scriptsize Recreated the 20 features for \texttt{cresci-17}.\\
+            We \textit{couldn't recreate} all 20 engineered features in \texttt{twibot-22} due to a lack of source base features.
+          \end{indentedblock}
+        \item \textbf{Train a Random Forest of 100 trees}
+          \begin{indentedblock}
+            \scriptsize Fully recreated.
+          \end{indentedblock}
+      \end{itemize}
+    \end{column}
+
+    \begin{column}{0.44\textwidth}
+      \begin{itemize}
+        \item \textbf{Test on all other datasets (not recreated)}
+          \begin{indentedblock}
+            \scriptsize We only had 2 datasets, so most we could do was pitting them against each other.
+          \end{indentedblock}
+      \end{itemize}
+
+
+      \centering
+      \begin{figure}[h!]
+        \centering
+        \includegraphics[width=0.7\textwidth]{./img/auc.png}
+        \caption{AUC}
+        \label{fig:auc}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% Slide 7: CZ - Improvements
+\begin{frame}{CZ - Improvements}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item \textbf{Entirely new dataset, \texttt{twibot-22}}
+          \begin{indentedblock}
+            \tiny Including this dataset highlighted the original conclusion that (a) data doesn't generalize well to other data, and (b) illustrates a flaw in feature engineering as a means to scale bot detection because the same features couldnt be engineered.
+          \end{indentedblock}
+        \item \textbf{LOGO (Leave One Group out)}
+          \begin{indentedblock}
+            \tiny The original \texttt{cresci-17} dataset could have been further data selected to identify the best dataset to train on that would generalize better. Leaving out most spam examples improved generalizability.
+          \end{indentedblock}
+        \item \textbf{Other Model}
+          \begin{indentedblock}
+            \tiny We also trained a Logistic Regression. The original paper stuck to only a Random Forest with 100 trees.
+          \end{indentedblock}
+      \end{itemize}
+    \end{column}
+
+    \begin{column}{0.46\textwidth}
+      \centering
+      \begin{figure}[h!]
+        \centering
+        \includegraphics[width=0.7\textwidth]{./img/rf.png}
+        \caption{Random Forest Data Selection}
+        \label{fig:rf}
+      \end{figure}
+      \begin{figure}[h!]
+        \centering
+        \includegraphics[width=0.7\textwidth]{./img/rf-v-lr.png}
+        \caption{Random Forest vs Logistic Regression}
+        \label{fig:rf-v-lr}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% Slide 8: Yang - Weaknesses
+\begin{frame}{Yang - Weaknesses}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{itemize}
+        \item \textbf{Feature engineering works on same-featured data.}
+          \begin{indentedblock}
+            \tiny New data may not have the same features as before. It may have new features.
+          \end{indentedblock}
+      \end{itemize}
+      \centering
+      \begin{figure}[h!]
+        \centering
+        \includegraphics[width=0.7\textwidth]{./img/likelihood.png}
+        \caption{Screen Name Likelihood}
+        \label{fig:likelihood}
+      \end{figure}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{itemize}
+        \item \textbf{N-Gram Likelihood was not well defined}
+          \begin{indentedblock}
+            \tiny We do not know what the corpus of text was that produced the PDF. We invented our own corpus, the totality of human usernames in the \texttt{twibot-22} dataset.\\
+            We also determined that the distribution is nearly identical in the \texttt{cresci-17} dataset, calling into question the original methodology that suggested it was important at all.
+          \end{indentedblock}
+        \item \textbf{Evaluation metric choice was not discussed}
+          \begin{indentedblock}
+            \tiny The choice of F1 was not discussed. It would be better to have used Recall, which penalizes false negatives more.\\
+            E.g. it is worse in a bot detection algorithm to let a bot ``slip through the cracks'' and cause information manipulation than for a human to answer how many fire hydrants.
+          \end{indentedblock}
+        \item \textbf{Random Forest of 100 trees without pre-pruning is a strange choice}
+          \begin{indentedblock}
+            \tiny Yang said their ``proposed framework does not aim to provide a more expressive algorithm; we will stick with random forest''.\\
+            But why chose an algorithm that is prone to overfitting?\\
+            At least try two algorithms or one with pre-pruning or less trees or something?
+          \end{indentedblock}
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% Slide 9: CZ - Weaknesses
+\begin{frame}{CZ - Weaknesses}
+  \begin{itemize}
+    \item \textbf{Datasets count}
+      \begin{indentedblock}
+        \small We only requested access to two datasets--one from the original paper, \texttt{cresci-17}, and the other not, \texttt{twibot-22}.\\
+        Better would have been to ask for two datasets from the original, keeping \texttt{twibot-22}.
+      \end{indentedblock}
+    \item \textbf{No baseline}
+      \begin{indentedblock}
+        \small Yang employed the \texttt{botometer} API to compare each dataset model against. It would have been good to include its usage, but it is rate limited to 5000 users per month, and the twibot dataset alone has 1000000.
+      \end{indentedblock}
+    \item \textbf{Seperability / Generalizability}
+      \begin{indentedblock}
+        \small We did not attempt to characterize or evaluate the seperability or generalizability of our datasets. We only used two datasets, and their sep/gen calculation requires an average of AUC across the grid.
+      \end{indentedblock}
+  \end{itemize}
+\end{frame}
+
+% Slide 10: Takeaways
+\begin{frame}{Takeaways}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item \textbf{Datasets are licensed, data isn't free.}
+          \begin{indentedblock}
+            \tiny ``Doing it right'' is hard. In a learning context, datasets are usually provided to you free of charge. In a research context, money and licensing becomes a factor.\\
+            In our case, we messaged the researchers who generated the original datasets, and they were gracious enough to grant access.
+          \end{indentedblock}
+      \end{itemize}
+
+      \centering
+      \begin{minipage}{0.48\linewidth}
+        \begin{figure}[h!]
+          \centering
+          \includegraphics[width=0.7\textwidth]{./img/cresci.png}
+          \caption{cresci-17}
+          \label{fig:cresci-17}
+        \end{figure}
+      \end{minipage}
+      \hfill
+      \begin{minipage}{0.48\linewidth}
+        \begin{figure}[h!]
+          \centering
+          \includegraphics[width=0.7\textwidth]{./img/twibot.png}
+          \caption{twibot-22}
+          \label{fig:twibot-22}
+        \end{figure}
+      \end{minipage}
+
+      \vspace{0.1cm}
+      \begin{indentedblock}
+        \tiny Getting a high quality service as a baseline would have costed money. 50 dollars for one month isn't much in the grand scheme, but dollars are dollars.
+      \end{indentedblock}
+    \end{column}
+
+    \begin{column}{0.46\textwidth}
+      \begin{itemize}
+        \item \textbf{Cleaning is hardest part}
+          \begin{indentedblock}
+            \scriptsize By far. Takes the longest, even compared to waiting around for the training to finish.
+          \end{indentedblock}
+        \item \textbf{Every paper has weaknesses.}
+          \begin{indentedblock}
+            \scriptsize Yang's paper isn't bulletproof. It has oversights, assumptions taken for granted, and doesn't pre-emptively defend itself against all possible scrutiny.\\
+            We were able to identify areas we could replicate Yang's work and areas we could improve.
+          \end{indentedblock}
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% Slide 11: Special Thanks and Datasets
+\begin{frame}{Special Thanks and Datasets}
+  \begin{itemize}
+    \item \textbf{Researchers}
+      \begin{itemize}
+        \item \href{mailto:stefano.cresci@iit.cnr.it}{Dr. Stefano Cresci}, Instituto Informatica Telematics, CNR
+        \item PhD Candidate \href{mailto:shangbin@cs.washington.edu}{Shangbin Feng}, University of Washington
+      \end{itemize}
+    \vspace{0.3cm}
+    \item \textbf{Dataset Access Request Locations}
+      \begin{itemize}
+        \item \texttt{cresci-17}: \url{http://mib.projects.iit.cnr.it/dataset.html}
+        \item \texttt{twibot-22}: \url{https://groups.google.com/g/twibot_access}
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\end{document}
