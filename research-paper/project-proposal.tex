@@ -1,0 +1,76 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=0.9in]{geometry}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{titlesec}
+\usepackage{enumitem}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue
+}
+
+\setlength{\parskip}{0.55em}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{3em}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{0.8em}{0.4em}
+\setlist[itemize]{topsep=0.3em, itemsep=0.2em, parsep=0pt}
+
+\begin{document}
+
+\begin{center}
+{\large\bfseries Cross-Domain Generalization for Social Bot and Troll Detection Using Lightweight Behavioral Features}\\[2pt]
+\textit{Project Proposal --- Chris Carl, Jehu Zepeda-Silva}
+\end{center}
+\vspace{0.4em}
+
+\section{Project Title}
+Cross-Domain Generalization for Social Bot and Troll Detection Using Lightweight Behavioral Features
+
+\section{Problem Description}
+
+The use of state-sponsered trolls and automated bots are commonly used to manipulate the opinion of the public on social media causing a mass spread of misinformation, increasing the gap between the public's political views, and threatening the trust placed on the democratic process. The detection of these accounts has proven to be difficult due to the malicious actors ability to swiftly adapt to strategies that elude existing models that perform great on labeled dataset but lose this performance on other platforms and/or different political campaings. 
+
+This issue matters since the accounts that are causing the greatest harm (election meddling, collaborative propaganda) are the ones that are not well represented in the datasets used to train models. Social media platforms, researchers, journalists, and policymakers would greatly benefit from a model that can generalize well and works at a large scale,
+
+
+\section{Dataset}
+
+\textbf{Base paper:} Yang, K.-C., Varol, O., Hui, P.-M., \& Menczer, F. (2020). ``Scalable and Generalizable Social Bot Detection through Data Selection.'' \emph{AAAI}, 34(01). \url{https://ojs.aaai.org/index.php/AAAI/article/view/5460}
+
+\textbf{Primary dataset:} \texttt{cresci-2017}, in the exact pre-compiled form used by Yang et al., via a Wayback Machine snapshot of their original ``Bot Repository'' (the live site has since been taken down). \url{https://web.archive.org/web/20250102020236/https://botometer.osome.iu.edu/bot-repository/datasets.html}
+
+\textbf{Backups:} (1) \texttt{cresci-2017} direct from its original creators, the MIB project, IIT-CNR Pisa. The full dataset is given on request for research use. \url{http://mib.projects.iit.cnr.it/dataset.html} \quad (2) TwiBot-22 (Feng et al., \emph{NeurIPS 2022} Datasets \& Benchmarks Track). Requires request for research use. \url{https://github.com/LuoUndergradXJTU/TwiBot-22}
+
+\textbf{Size/features:} 14{,}368 accounts, verified by row count on our downloaded files, 3{,}474 genuine and 10{,}894 bots (traditional spambots, social spambots, fake followers). We only need the \texttt{users.csv} profile-metadata file from each of the eight account-type folders (genuine, 3 social-spambot, 4 traditional-spambot, plus fake-followers); the accompanying \texttt{tweets.csv} files are not required, since Yang et al.'s $\sim$20 features (follower/friend/status counts, age-normalized rates, profile flags, screen-name stats) come entirely from account metadata, not tweet content.
+ 
+\textbf{Preprocessing:} Handle all missing fields, log-transform skewed counts, compute age-normalized rate features, collapse bot subtypes into one label. 
+
+\section{Initial Approach}
+
+To reveal the generalization gap, replicate Yang et al.'s process by training a random forest on the $\sim$20 metadata features and evaluating it using both cross-validation and cross-subtype validation. Next, try to match or enhance their findings using their data-selection strategy (seeking training-data combinations rather than pooling everything), and compare against one alternative model (logistic regression or gradient boosting) using the same procedure.
+
+\section{Expected Challenges}
+ 
+\begin{itemize}
+    \item \textbf{Dataset inconsistency:} a model trained on a bot subtype can generalize poorly when looking at a different bot; we will train on some subtypes and test on a different subtype the model has not seen. The accuracy will tell us of out model generalizes well (similar to Yang et. al.'s cross-subtype validation approach)
+    \item \textbf{Class imbalance} (10{,}894 bots vs.\ 3{,}474 humans): address by splitting data into even ratios and using it to train our model.
+    \item \textbf{Data access:} our primary data source is an archived (Wayback Machine) copy of taken down page. The MIB request and TwiBot-22 remain fallbacks if other data is needed.
+\end{itemize}
+
+\section{Team Roles}
+
+Our team consists of two members. We plan to divide the work as follows:
+
+\begin{itemize}
+    \item \textbf{Person 1:} Data collection and preprocessing: Downloading and cleaning the \texttt{cresci-2017} dataset, deriving the metadata features (rate features, log-transforms, screen-name features), and handling the TwiBot-22 access request.
+    \item \textbf{Person 2:} Modeling and evaluation: Implementing the random forest baseline and alternative classifier(s), running cross-validation and cross-dataset generalization tests, and analyzing results (e.g., SHAP-based interpretation).
+\end{itemize}
+
+The final presentation and report writing responsibility will be shared, with each of us documenting the portion of the work we did.
+
+\end{document}

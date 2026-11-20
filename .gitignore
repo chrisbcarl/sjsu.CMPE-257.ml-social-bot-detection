@@ -1,3 +1,8 @@
+/backups/
+/.venv/
+/data/
+/results/
+
 # project specific
 .vscode/settings.json
 bin/**
