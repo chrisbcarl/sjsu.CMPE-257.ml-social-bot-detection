@@ -52,7 +52,7 @@ jupyter notebook ./classifier.ipynb
 
 
 # Authors
-|Name             |Email                       |Github Username           |Contributions                               |
-|---              |---                         |---                       |---                                         |
-|Chris Carl       |<chris.carl@sjsu.edu>       |data acquisition, slides, secondary implementation|
-|Jehu Zepeda-Silva|<jehu.zepeda-silva@sjsu.edu>|jehuzepeda-silva-rgb      |primary implementation                              |
+|Name             |Email                       |Github Username     |Contributions                                     |
+|---              |---                         |---                 |---                                               |
+|Chris Carl       |<chris.carl@sjsu.edu>       |chrisbcarl          |data acquisition, slides, secondary implementation|
+|Jehu Zepeda-Silva|<jehu.zepeda-silva@sjsu.edu>|jehuzepeda-silva-rgb|primary implementation                            |
