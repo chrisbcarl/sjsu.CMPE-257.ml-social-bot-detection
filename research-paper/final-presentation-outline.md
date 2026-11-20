@@ -61,7 +61,7 @@
 ## Yang - Definitions
 - seperability - AUC averaging across columns
 - generalizability - AUC averaging across rows
-- likelihood - sum of 2-gram probabilities of a username
+- likelihood - geometric mean of a username's bigram probabilities
 - SHAP Values - describes each feature as more human-like or more bot-like
 
 ## CZ - Process
@@ -103,6 +103,10 @@
     ![Random Forest vs Logistic Regression](./img/rf-v-lr.png)
 
 ## Yang - Weaknesses
+- Data selection did not include understampling to address class imbalance.
+
+    Yang took the data as is or forgot to mention addressing the class imbalances.
+
 - Feature engineering works on same-featured data.
 
     New data may not have the same features as before. It may have new features.
